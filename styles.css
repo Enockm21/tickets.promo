@@ -1,0 +1,22 @@
+.container {
+    height: 200% !important;
+    padding-bottom: 300px !important;
+}
+
+body {
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.input-name {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+}
+
+table {}
+
+.btn-suivant {
+    display: flex !important;
+    justify-content: center !important;
+}
