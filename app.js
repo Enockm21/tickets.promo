@@ -18,7 +18,6 @@ const allusers = async () => {
   const response = await fetch(urlUsers);
   const data = await response.json();
   users = data.data;
-  console.log(data);
 
   users.forEach(function (user) {
     select.innerHTML += `<option value="${user.id}">${user.username}</option>`;
@@ -27,6 +26,7 @@ const allusers = async () => {
 };
 
 allusers();
+
 // fonction pour supprimer les tickets
 
 const addtickets = async () => {
@@ -37,28 +37,17 @@ const addtickets = async () => {
       userId: select.value,
     }),
   });
-  console.log(res);
 };
 form.addEventListener("click", addtickets);
-// fonction pour afficher les tickets
-// const addUser = async () => {
-//   const respons = await fetch(urlUsers, {
-//     method: "POST",
-//     body: new URLSearchParams({
-//       username: btnInputPerson.value,
-//       password: "test",
-//     }),
-//   });
-//   console.log(res);
-// };
+
+//             Ajouter tous les utilisateurs
 async function AddUsers() {
-  let use = {
-    username: btnInputPerson.value,
-    password: "test",
-  };
   await fetch("https://web-help-request-api.herokuapp.com/users", {
     method: "POST",
-    body: new URLSearchParams(use),
+    body: new URLSearchParams({
+      username: btnInputPerson.value,
+      password: "test",
+    }),
   });
 
   btnInputPerson.value = null;
@@ -66,7 +55,8 @@ async function AddUsers() {
   location.reload();
 }
 btnSubmitPerson.addEventListener("click", AddUsers);
-// addUser();
+
+// afficher les tickets
 let tickets = [];
 const alltickets = async () => {
   const response = await fetch(urlTickets);
@@ -76,9 +66,10 @@ const alltickets = async () => {
 
   tickets.forEach(function (ticket) {
     let array = users.filter((el) => el.id === ticket.users_id);
-
+    console.log(array);
     let user = array[0];
     let userName = user.username;
+    console.log(ticket);
 
     tbody.innerHTML += `<tr>
                           <td>${ticket.id}</td>
@@ -91,56 +82,16 @@ const alltickets = async () => {
 
 // fonction pour supprimer les tickets
 async function deleteTickets() {
-  let ticketRemove = [];
-
-  await fetch(urlTickets)
-    .then((response) => response.json())
-    .then(function (data) {
-      console.log("les users", users);
-
-      ticketRemove = data.data[0].id;
-      console.log(ticketRemove);
-      console.log(tickets);
-      const respons = fetch(
-        `https://web-help-request-api.herokuapp.com/tickets/${ticketRemove}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: JSON.stringify(ticketRemove),
-        }
-      );
-    });
+  let ticketRemove = tickets[0].id;
+  const respons = await fetch(
+    `https://web-help-request-api.herokuapp.com/tickets/${ticketRemove}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify(ticketRemove),
+    }
+  );
 }
-
-// deleteTickets();
-btnDeleteTicket.addEventListener("submit", () => console.log("cool"));
-// // function send(e) {
-//   e.preventDefault();
-//   fetch("https://web-help-request-api.herokuapp.com/tickets", {
-//     method: "POST",
-
-//     body: new URLSearchParams({
-//       subject: description,
-//       userId: 58,
-//     }),
-//   });
-//   // .then(function (res) {
-//   //   if (res.ok) {
-//   //     return res.json();
-//   //   }
-//   // })
-//   // .then(function (value) {
-//   //   document.getElementById("description").innerText = value.postData.text;
-//   // });
-// }
-// tickets.forEach(function (user) {
-//   // eltd.innerHTML = "";
-//   for (let i = 0; i < user.length; i++) {
-
-//   }
-// });
-
-// console.log("tableau users", users);
-// users.push(data);
+btnDeleteTicket.addEventListener("click", deleteTickets);

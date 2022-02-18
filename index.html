@@ -10,46 +10,27 @@
   </head>
 
 <body>
-    
-    
-<div class="collapse" id="navbarToggleExternalContent">
-  <div class="bg-dark p-4">
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item"><a href="#">Library</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Data</li>
-  </ol>
-  </div>
-</div>
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </div>
-</nav>
-
+  
 
 <div class="card">
     <div class="card-header text-center  p-3 mb-2 bg-primary text-light">
-    Distributeur de ticket pour la promo
+    Distributeur des tickets pour la promo 🎟️
   </div>
   <div class="card-header text-center  p-3 mb-2 bg-secondary text-light">
     Ici c'est comme la poissonnerie , il faut faire la queue !
+   🐠
   </div>
   <div class="card-body">
+<form id="form">
 <div class="input-group mb-3" id="option">
-  <form id="form">
-
   <select class="form-select" aria-label="Default select example" id="select">
-  <option> Choisir une personne </option>
-  </select>
-
-  <input type="text" class="form-control  w-15 p-3" placeholder="Description" aria-label="Description" id="description">
-  <input type="submit" class="btn btn-dark w-15 " value="help me"/>
-</form> 
-
+    <option> Choisir une personne </option>
+    </select>
+  
+    <input type="text" class="form-control  w-15 p-3" placeholder="Description" aria-label="Description" id="description">
+    <input type="submit" class="btn btn-dark w-15 " value="help me"/>
 </div>
+</form> 
 <div>
   <form>
     <input class="form-control input-lg" type="text" id="input-person" placeholder="taper le nom">
@@ -60,9 +41,9 @@
     liste des apprenant(e)s
   </div>
   <br>
-  <form >
-    <div class="text-center"> <button type="submit" class="btn btn-dark w-15 " id="delete-tickets"> Au suivant !</button> </div>
-  </form>
+  
+    <div class="text-center"> <button  class="btn btn-dark w-15 " id="delete-tickets"> Au suivant !</button> </div>
+  
   
   <br>
 <table id ="users" class="table table-dark table-striped">
