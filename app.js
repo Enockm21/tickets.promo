@@ -5,12 +5,14 @@ const submit = document.getElementById("submit");
 const tbody = document.getElementById("tbody");
 const select = document.getElementById("select");
 const elementtr = document.getElementById("tr");
+const btnDeleteTicket = document.getElementById("delete-tickets");
 // const eltd = document.createElement("td");
+const urlTickets = "https://web-help-request-api.herokuapp.com/tickets";
+const urlUsers = "https://web-help-request-api.herokuapp.com/users";
+
 let users = [];
 const allusers = async () => {
-  const response = await fetch(
-    "https://web-help-request-api.herokuapp.com/users"
-  );
+  const response = await fetch(urlUsers);
   const data = await response.json();
   users = data.data;
   console.log(data);
@@ -18,56 +20,68 @@ const allusers = async () => {
   users.forEach(function (user) {
     select.innerHTML += `<option value="${user.id}">${user.username}</option>`;
   });
+  alltickets();
 };
 
 allusers();
 
 const addtickets = async () => {
-  const res = await fetch(
-    "https://web-help-request-api.herokuapp.com/tickets",
-    {
-      method: "POST",
-      body: new URLSearchParams({
-        subject: description.value,
-        userId: select.value,
-      }),
-    }
-  );
+  const res = await fetch(urlTickets, {
+    method: "POST",
+    body: new URLSearchParams({
+      subject: description.value,
+      userId: select.value,
+    }),
+  });
   console.log(res);
 };
-form.addEventListener("submit", addtickets);
+form.addEventListener("click", addtickets);
+
 let tickets = [];
 const alltickets = async () => {
-  const response = await fetch(
-    "https://web-help-request-api.herokuapp.com/tickets"
-  );
+  const response = await fetch(urlTickets);
   const data = await response.json();
 
   tickets = data.data;
-  // tickets.forEach(function (ticket) {
-  //   let userName = users.map((el) => {
-  //     if (ticket.users_id === el.id) {
-  //       return el.username;
-  //     }
-  //   });
-  //   //
-  //   console.log(userName);
-  //   // }
-  //   // console.log(ticket.users_id);
-  // });
 
-  for (let i = 0; i < tickets.length; i++) {
+  tickets.forEach(function (ticket) {
+    let array = users.filter((el) => el.id === ticket.users_id);
+    console.log(array);
+    let user = array[0];
+    let userName = user.username;
+
     tbody.innerHTML += `<tr>
-                          <td>${tickets[i].id}</td>
-                          <td></td>
-                          <td>${tickets[i].subject}</td>
-                          <td>${tickets[i].date}</td>
+                          <td>${ticket.id}</td>
+                          <td>${userName}</td>
+                          <td>${ticket.subject}</td>
+                          <td>${ticket.date}</td>
                       </tr>`;
-  }
+  });
 };
-alltickets();
 
-// function send(e) {
+const deleteTickets = async () => {
+  let ticketRemove = [];
+  fetch(urlTickets)
+    .then((response) => response.json())
+    .then(function (data) {
+      ticketRemove = data.data[0].id;
+      console.log(ticketRemove);
+      const respons = fetch(
+        `https://web-help-request-api.herokuapp.com/tickets/${ticketRemove}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: JSON.stringify(ticketRemove),
+        }
+      );
+    });
+};
+console.log(users);
+// deleteTickets();
+btnDeleteTicket.addEventListener("submit", deleteTickets);
+// // function send(e) {
 //   e.preventDefault();
 //   fetch("https://web-help-request-api.herokuapp.com/tickets", {
 //     method: "POST",
@@ -95,11 +109,3 @@ alltickets();
 
 // console.log("tableau users", users);
 // users.push(data);
-tickets.forEach(function (ticket) {
-  var userName = users.map((el) => {
-    if (ticket.users_id === el.id) {
-      console.log(el.username);
-    }
-    console.log(userName);
-  });
-});
