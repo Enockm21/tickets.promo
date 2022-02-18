@@ -5,11 +5,14 @@ const submit = document.getElementById("submit");
 const tbody = document.getElementById("tbody");
 const select = document.getElementById("select");
 const elementtr = document.getElementById("tr");
+const btnSubmitPerson = document.getElementById("btn-addperson");
+const btnInputPerson = document.getElementById("input-person");
+
 const btnDeleteTicket = document.getElementById("delete-tickets");
-// const eltd = document.createElement("td");
 const urlTickets = "https://web-help-request-api.herokuapp.com/tickets";
 const urlUsers = "https://web-help-request-api.herokuapp.com/users";
 
+// fonction pour afficher les utilisateurs
 let users = [];
 const allusers = async () => {
   const response = await fetch(urlUsers);
@@ -24,6 +27,7 @@ const allusers = async () => {
 };
 
 allusers();
+// fonction pour supprimer les tickets
 
 const addtickets = async () => {
   const res = await fetch(urlTickets, {
@@ -36,7 +40,33 @@ const addtickets = async () => {
   console.log(res);
 };
 form.addEventListener("click", addtickets);
+// fonction pour afficher les tickets
+// const addUser = async () => {
+//   const respons = await fetch(urlUsers, {
+//     method: "POST",
+//     body: new URLSearchParams({
+//       username: btnInputPerson.value,
+//       password: "test",
+//     }),
+//   });
+//   console.log(res);
+// };
+async function AddUsers() {
+  let use = {
+    username: btnInputPerson.value,
+    password: "test",
+  };
+  await fetch("https://web-help-request-api.herokuapp.com/users", {
+    method: "POST",
+    body: new URLSearchParams(use),
+  });
 
+  btnInputPerson.value = null;
+
+  location.reload();
+}
+btnSubmitPerson.addEventListener("click", AddUsers);
+// addUser();
 let tickets = [];
 const alltickets = async () => {
   const response = await fetch(urlTickets);
@@ -46,7 +76,7 @@ const alltickets = async () => {
 
   tickets.forEach(function (ticket) {
     let array = users.filter((el) => el.id === ticket.users_id);
-    console.log(array);
+
     let user = array[0];
     let userName = user.username;
 
@@ -59,13 +89,18 @@ const alltickets = async () => {
   });
 };
 
-const deleteTickets = async () => {
+// fonction pour supprimer les tickets
+async function deleteTickets() {
   let ticketRemove = [];
-  fetch(urlTickets)
+
+  await fetch(urlTickets)
     .then((response) => response.json())
     .then(function (data) {
+      console.log("les users", users);
+
       ticketRemove = data.data[0].id;
       console.log(ticketRemove);
+      console.log(tickets);
       const respons = fetch(
         `https://web-help-request-api.herokuapp.com/tickets/${ticketRemove}`,
         {
@@ -77,10 +112,10 @@ const deleteTickets = async () => {
         }
       );
     });
-};
-console.log(users);
+}
+
 // deleteTickets();
-btnDeleteTicket.addEventListener("submit", deleteTickets);
+btnDeleteTicket.addEventListener("submit", () => console.log("cool"));
 // // function send(e) {
 //   e.preventDefault();
 //   fetch("https://web-help-request-api.herokuapp.com/tickets", {
